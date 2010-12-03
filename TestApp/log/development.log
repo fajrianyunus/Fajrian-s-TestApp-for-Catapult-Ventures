@@ -1,0 +1,1423 @@
+  [4;36;1mSQL (72.0ms)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (35.0ms)[0m   [0m SELECT i.relname, d.indisunique, a.attname
+ FROM pg_class t, pg_class i, pg_index d, pg_attribute a
+ WHERE i.relkind = 'i'
+ AND d.indexrelid = i.oid
+ AND d.indisprimary = 'f'
+ AND t.oid = d.indrelid
+ AND t.relname = 'schema_migrations'
+ AND a.attrelid = t.oid
+ AND ( d.indkey[0]=a.attnum OR d.indkey[1]=a.attnum
+ OR d.indkey[2]=a.attnum OR d.indkey[3]=a.attnum
+ OR d.indkey[4]=a.attnum OR d.indkey[5]=a.attnum
+ OR d.indkey[6]=a.attnum OR d.indkey[7]=a.attnum
+ OR d.indkey[8]=a.attnum OR d.indkey[9]=a.attnum )
+ ORDER BY i.relname
+[0m
+  [4;36;1mSQL (122.0ms)[0m   [0;1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateCondos (20101203023931)
+  [4;36;1mSQL (279.0ms)[0m   [0;1mCREATE TABLE "condos" ("id" serial primary key, "name" text, "price" integer, "area" integer, "number_of_bedrooms" integer, "price_per_square_feet" integer, "agent_id" integer, "created_at" timestamp, "updated_at" timestamp) [0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSELECT version()[0m
+  [4;36;1mPK and serial sequence (3.0ms)[0m   [0;1m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'schema_migrations'::regclass
+[0m
+  [4;35;1mPK and custom sequence (4.0ms)[0m   [0m SELECT attr.attname,
+ CASE
+ WHEN split_part(def.adsrc, '''', 2) ~ '.' THEN
+ substr(split_part(def.adsrc, '''', 2),
+ strpos(split_part(def.adsrc, '''', 2), '.')+1)
+ ELSE split_part(def.adsrc, '''', 2)
+ END as relname
+ FROM pg_class t
+ JOIN pg_attribute attr ON (t.oid = attrelid)
+ JOIN pg_attrdef def ON (adrelid = attrelid AND adnum = attnum)
+ JOIN pg_constraint cons ON (conrelid = adrelid AND adnum = conkey[1])
+ WHERE t.oid = 'schema_migrations'::regclass
+ AND cons.contype = 'p'
+ AND def.adsrc ~* 'nextval'
+[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20101203023931')[0m
+  [4;35;1mPK and serial sequence (2.0ms)[0m   [0m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'schema_migrations'::regclass
+[0m
+  [4;36;1mPK and custom sequence (1.0ms)[0m   [0;1m SELECT attr.attname,
+ CASE
+ WHEN split_part(def.adsrc, '''', 2) ~ '.' THEN
+ substr(split_part(def.adsrc, '''', 2),
+ strpos(split_part(def.adsrc, '''', 2), '.')+1)
+ ELSE split_part(def.adsrc, '''', 2)
+ END as relname
+ FROM pg_class t
+ JOIN pg_attribute attr ON (t.oid = attrelid)
+ JOIN pg_attrdef def ON (adrelid = attrelid AND adnum = attnum)
+ JOIN pg_constraint cons ON (conrelid = adrelid AND adnum = conkey[1])
+ WHERE t.oid = 'schema_migrations'::regclass
+ AND cons.contype = 'p'
+ AND def.adsrc ~* 'nextval'
+[0m
+Migrating to CreateAgents (20101203024313)
+  [4;35;1mSQL (152.0ms)[0m   [0mCREATE TABLE "agents" ("id" serial primary key, "name" text, "phone_number" text, "created_at" timestamp, "updated_at" timestamp) [0m
+  [4;36;1mPK and serial sequence (3.0ms)[0m   [0;1m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'schema_migrations'::regclass
+[0m
+  [4;35;1mPK and custom sequence (2.0ms)[0m   [0m SELECT attr.attname,
+ CASE
+ WHEN split_part(def.adsrc, '''', 2) ~ '.' THEN
+ substr(split_part(def.adsrc, '''', 2),
+ strpos(split_part(def.adsrc, '''', 2), '.')+1)
+ ELSE split_part(def.adsrc, '''', 2)
+ END as relname
+ FROM pg_class t
+ JOIN pg_attribute attr ON (t.oid = attrelid)
+ JOIN pg_attrdef def ON (adrelid = attrelid AND adnum = attnum)
+ JOIN pg_constraint cons ON (conrelid = adrelid AND adnum = conkey[1])
+ WHERE t.oid = 'schema_migrations'::regclass
+ AND cons.contype = 'p'
+ AND def.adsrc ~* 'nextval'
+[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20101203024313')[0m
+  [4;35;1mPK and serial sequence (3.0ms)[0m   [0m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'schema_migrations'::regclass
+[0m
+  [4;36;1mPK and custom sequence (2.0ms)[0m   [0;1m SELECT attr.attname,
+ CASE
+ WHEN split_part(def.adsrc, '''', 2) ~ '.' THEN
+ substr(split_part(def.adsrc, '''', 2),
+ strpos(split_part(def.adsrc, '''', 2), '.')+1)
+ ELSE split_part(def.adsrc, '''', 2)
+ END as relname
+ FROM pg_class t
+ JOIN pg_attribute attr ON (t.oid = attrelid)
+ JOIN pg_attrdef def ON (adrelid = attrelid AND adnum = attnum)
+ JOIN pg_constraint cons ON (conrelid = adrelid AND adnum = conkey[1])
+ WHERE t.oid = 'schema_migrations'::regclass
+ AND cons.contype = 'p'
+ AND def.adsrc ~* 'nextval'
+[0m
+  [4;35;1mSQL (2.0ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mPK and serial sequence (4.0ms)[0m   [0;1m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'agents'::regclass
+[0m
+  [4;35;1mSQL (2.0ms)[0m   [0m SELECT i.relname, d.indisunique, a.attname
+ FROM pg_class t, pg_class i, pg_index d, pg_attribute a
+ WHERE i.relkind = 'i'
+ AND d.indexrelid = i.oid
+ AND d.indisprimary = 'f'
+ AND t.oid = d.indrelid
+ AND t.relname = 'agents'
+ AND a.attrelid = t.oid
+ AND ( d.indkey[0]=a.attnum OR d.indkey[1]=a.attnum
+ OR d.indkey[2]=a.attnum OR d.indkey[3]=a.attnum
+ OR d.indkey[4]=a.attnum OR d.indkey[5]=a.attnum
+ OR d.indkey[6]=a.attnum OR d.indkey[7]=a.attnum
+ OR d.indkey[8]=a.attnum OR d.indkey[9]=a.attnum )
+ ORDER BY i.relname
+[0m
+  [4;36;1mPK and serial sequence (2.0ms)[0m   [0;1m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'condos'::regclass
+[0m
+  [4;35;1mSQL (2.0ms)[0m   [0m SELECT i.relname, d.indisunique, a.attname
+ FROM pg_class t, pg_class i, pg_index d, pg_attribute a
+ WHERE i.relkind = 'i'
+ AND d.indexrelid = i.oid
+ AND d.indisprimary = 'f'
+ AND t.oid = d.indrelid
+ AND t.relname = 'condos'
+ AND a.attrelid = t.oid
+ AND ( d.indkey[0]=a.attnum OR d.indkey[1]=a.attnum
+ OR d.indkey[2]=a.attnum OR d.indkey[3]=a.attnum
+ OR d.indkey[4]=a.attnum OR d.indkey[5]=a.attnum
+ OR d.indkey[6]=a.attnum OR d.indkey[7]=a.attnum
+ OR d.indkey[8]=a.attnum OR d.indkey[9]=a.attnum )
+ ORDER BY i.relname
+[0m
+  [4;36;1mPK and serial sequence (7.0ms)[0m   [0;1m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'agents'::regclass
+[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSELECT version()[0m
+  [4;36;1mSQL (3.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('fajrian yunus', '86666666', '2010-12-03 03:09:45.490000', '2010-12-03 03:09:45.490000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('theresia', '81111111', '2010-12-03 03:11:43.169000', '2010-12-03 03:11:43.169000') RETURNING "id"[0m
+  [4;36;1mSQL (123.0ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+Migrating to CreateCondos (20101203023931)
+Migrating to CreateAgents (20101203024313)
+Migrating to RemovePricePerSquareFeetFromCondos (20101203062758)
+  [4;35;1mSQL (81.0ms)[0m   [0mALTER TABLE "condos" DROP "price_per_square_feet"[0m
+  [4;36;1mSQL (20.0ms)[0m   [0;1mSELECT version()[0m
+  [4;35;1mPK and serial sequence (275.0ms)[0m   [0m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'schema_migrations'::regclass
+[0m
+  [4;36;1mPK and custom sequence (43.0ms)[0m   [0;1m SELECT attr.attname,
+ CASE
+ WHEN split_part(def.adsrc, '''', 2) ~ '.' THEN
+ substr(split_part(def.adsrc, '''', 2),
+ strpos(split_part(def.adsrc, '''', 2), '.')+1)
+ ELSE split_part(def.adsrc, '''', 2)
+ END as relname
+ FROM pg_class t
+ JOIN pg_attribute attr ON (t.oid = attrelid)
+ JOIN pg_attrdef def ON (adrelid = attrelid AND adnum = attnum)
+ JOIN pg_constraint cons ON (conrelid = adrelid AND adnum = conkey[1])
+ WHERE t.oid = 'schema_migrations'::regclass
+ AND cons.contype = 'p'
+ AND def.adsrc ~* 'nextval'
+[0m
+  [4;35;1mSQL (27.0ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20101203062758')[0m
+  [4;36;1mPK and serial sequence (2.0ms)[0m   [0;1m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'schema_migrations'::regclass
+[0m
+  [4;35;1mPK and custom sequence (2.0ms)[0m   [0m SELECT attr.attname,
+ CASE
+ WHEN split_part(def.adsrc, '''', 2) ~ '.' THEN
+ substr(split_part(def.adsrc, '''', 2),
+ strpos(split_part(def.adsrc, '''', 2), '.')+1)
+ ELSE split_part(def.adsrc, '''', 2)
+ END as relname
+ FROM pg_class t
+ JOIN pg_attribute attr ON (t.oid = attrelid)
+ JOIN pg_attrdef def ON (adrelid = attrelid AND adnum = attnum)
+ JOIN pg_constraint cons ON (conrelid = adrelid AND adnum = conkey[1])
+ WHERE t.oid = 'schema_migrations'::regclass
+ AND cons.contype = 'p'
+ AND def.adsrc ~* 'nextval'
+[0m
+Migrating to AddPricePerSquareFeetToCondos (20101203062943)
+  [4;36;1mSQL (86.0ms)[0m   [0;1mALTER TABLE "condos" ADD "price_per_square_feet" float4[0m
+  [4;35;1mPK and serial sequence (3.0ms)[0m   [0m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'schema_migrations'::regclass
+[0m
+  [4;36;1mPK and custom sequence (2.0ms)[0m   [0;1m SELECT attr.attname,
+ CASE
+ WHEN split_part(def.adsrc, '''', 2) ~ '.' THEN
+ substr(split_part(def.adsrc, '''', 2),
+ strpos(split_part(def.adsrc, '''', 2), '.')+1)
+ ELSE split_part(def.adsrc, '''', 2)
+ END as relname
+ FROM pg_class t
+ JOIN pg_attribute attr ON (t.oid = attrelid)
+ JOIN pg_attrdef def ON (adrelid = attrelid AND adnum = attnum)
+ JOIN pg_constraint cons ON (conrelid = adrelid AND adnum = conkey[1])
+ WHERE t.oid = 'schema_migrations'::regclass
+ AND cons.contype = 'p'
+ AND def.adsrc ~* 'nextval'
+[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20101203062943')[0m
+  [4;36;1mPK and serial sequence (3.0ms)[0m   [0;1m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'schema_migrations'::regclass
+[0m
+  [4;35;1mPK and custom sequence (1.0ms)[0m   [0m SELECT attr.attname,
+ CASE
+ WHEN split_part(def.adsrc, '''', 2) ~ '.' THEN
+ substr(split_part(def.adsrc, '''', 2),
+ strpos(split_part(def.adsrc, '''', 2), '.')+1)
+ ELSE split_part(def.adsrc, '''', 2)
+ END as relname
+ FROM pg_class t
+ JOIN pg_attribute attr ON (t.oid = attrelid)
+ JOIN pg_attrdef def ON (adrelid = attrelid AND adnum = attnum)
+ JOIN pg_constraint cons ON (conrelid = adrelid AND adnum = conkey[1])
+ WHERE t.oid = 'schema_migrations'::regclass
+ AND cons.contype = 'p'
+ AND def.adsrc ~* 'nextval'
+[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mPK and serial sequence (2.0ms)[0m   [0m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'agents'::regclass
+[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1m SELECT i.relname, d.indisunique, a.attname
+ FROM pg_class t, pg_class i, pg_index d, pg_attribute a
+ WHERE i.relkind = 'i'
+ AND d.indexrelid = i.oid
+ AND d.indisprimary = 'f'
+ AND t.oid = d.indrelid
+ AND t.relname = 'agents'
+ AND a.attrelid = t.oid
+ AND ( d.indkey[0]=a.attnum OR d.indkey[1]=a.attnum
+ OR d.indkey[2]=a.attnum OR d.indkey[3]=a.attnum
+ OR d.indkey[4]=a.attnum OR d.indkey[5]=a.attnum
+ OR d.indkey[6]=a.attnum OR d.indkey[7]=a.attnum
+ OR d.indkey[8]=a.attnum OR d.indkey[9]=a.attnum )
+ ORDER BY i.relname
+[0m
+  [4;35;1mPK and serial sequence (2.0ms)[0m   [0m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'condos'::regclass
+[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1m SELECT i.relname, d.indisunique, a.attname
+ FROM pg_class t, pg_class i, pg_index d, pg_attribute a
+ WHERE i.relkind = 'i'
+ AND d.indexrelid = i.oid
+ AND d.indisprimary = 'f'
+ AND t.oid = d.indrelid
+ AND t.relname = 'condos'
+ AND a.attrelid = t.oid
+ AND ( d.indkey[0]=a.attnum OR d.indkey[1]=a.attnum
+ OR d.indkey[2]=a.attnum OR d.indkey[3]=a.attnum
+ OR d.indkey[4]=a.attnum OR d.indkey[5]=a.attnum
+ OR d.indkey[6]=a.attnum OR d.indkey[7]=a.attnum
+ OR d.indkey[8]=a.attnum OR d.indkey[9]=a.attnum )
+ ORDER BY i.relname
+[0m
+  [4;36;1mAgent Load (3.0ms)[0m   [0;1mSELECT * FROM "agents" [0m
+  [4;35;1mAgent Delete all (2.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (1)) [0m
+  [4;36;1mAgent Delete all (1.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (2)) [0m
+  [4;35;1mCondo Load (1.0ms)[0m   [0mSELECT * FROM "condos" [0m
+  [4;36;1mAgent Load (2.0ms)[0m   [0;1mSELECT * FROM "agents" [0m
+  [4;35;1mCondo Load (1.0ms)[0m   [0mSELECT * FROM "condos" [0m
+  [4;36;1mAgent Load (2.0ms)[0m   [0;1mSELECT * FROM "agents" [0m
+  [4;35;1mCondo Load (1.0ms)[0m   [0mSELECT * FROM "condos" [0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'joseph lim' AND phone_number LIKE '81984607					') LIMIT 1[0m
+  [4;35;1mPK and serial sequence (5.0ms)[0m   [0m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'agents'::regclass
+[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSELECT version()[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('joseph lim', '81984607', '2010-12-03 06:55:31.788000', '2010-12-03 06:55:31.788000') RETURNING "id"[0m
+  [4;36;1mPK and serial sequence (2.0ms)[0m   [0;1m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'condos'::regclass
+[0m
+  [4;35;1mSQL (28.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the trillium', NULL, 1798, 3, 3, '2010-12-03 06:55:31.836000', '2010-12-03 06:55:31.836000', 2169.08) RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shawn karan', '82888228', '2010-12-03 06:55:31.939000', '2010-12-03 06:55:31.939000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('maysprings', NULL, 1346, 3, 4, '2010-12-03 06:55:31.999000', '2010-12-03 06:55:31.999000', 760.0) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'propnex project marketing' AND phone_number LIKE '94501307 ') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('propnex project marketing', '94501307', '2010-12-03 06:55:32.038000', '2010-12-03 06:55:32.038000') RETURNING "id"[0m
+  [4;35;1mAgent Load (4.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'edwin lim' AND phone_number LIKE '84888899					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('edwin lim', '84888899', '2010-12-03 06:55:32.086000', '2010-12-03 06:55:32.086000') RETURNING "id"[0m
+  [4;35;1mSQL (5.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('legenda @ joo chiat', NULL, 1238, 3, 6, '2010-12-03 06:55:32.110000', '2010-12-03 06:55:32.110000', 743.13) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:32.141000', '2010-12-03 06:55:32.141000') RETURNING "id"[0m
+  [4;36;1mSQL (24.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('kentish green', NULL, 1313, 3, 7, '2010-12-03 06:55:32.177000', '2010-12-03 06:55:32.177000', 898.71) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'william .' AND phone_number LIKE '81028866					') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('william .', '81028866', '2010-12-03 06:55:32.281000', '2010-12-03 06:55:32.281000') RETURNING "id"[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('leonie hill residences', NULL, 1389, 3, 8, '2010-12-03 06:55:32.294000', '2010-12-03 06:55:32.294000', 2199.42) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'patrick poh - 傅敬烝' AND phone_number LIKE '98575031					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('patrick poh - 傅敬烝', '98575031', '2010-12-03 06:55:32.322000', '2010-12-03 06:55:32.322000') RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:32.363000', '2010-12-03 06:55:32.363000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('butterworth 8', NULL, 1023, 2, 10, '2010-12-03 06:55:32.375000', '2010-12-03 06:55:32.375000', 1094.82) RETURNING "id"[0m
+  [4;35;1mAgent Load (2.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shawn karan', '82888228', '2010-12-03 06:55:32.404000', '2010-12-03 06:55:32.404000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('mackenzie 88', NULL, 710, 1, 11, '2010-12-03 06:55:32.447000', '2010-12-03 06:55:32.447000', 1550.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'edwin lim' AND phone_number LIKE '84888899					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('edwin lim', '84888899', '2010-12-03 06:55:32.477000', '2010-12-03 06:55:32.477000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('d''leedon (former farrer court)', NULL, 1173, 3, 12, '2010-12-03 06:55:32.500000', '2010-12-03 06:55:32.500000', 1530.26) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:32.521000', '2010-12-03 06:55:32.521000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('icon', NULL, 657, 1, 13, '2010-12-03 06:55:32.529000', '2010-12-03 06:55:32.529000', 1748.86) RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:32.551000', '2010-12-03 06:55:32.551000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('dover parkview', NULL, 1216, 2, 14, '2010-12-03 06:55:32.578000', '2010-12-03 06:55:32.578000', 921.05) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:32.604000', '2010-12-03 06:55:32.604000') RETURNING "id"[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('gloucester mansions', NULL, 657, 1, 15, '2010-12-03 06:55:32.615000', '2010-12-03 06:55:32.615000', 1613.39) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'helen chai' AND phone_number LIKE '91066901 ') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('helen chai', '91066901', '2010-12-03 06:55:32.644000', '2010-12-03 06:55:32.644000') RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:32.659000', '2010-12-03 06:55:32.659000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('pebble bay', NULL, 860, 1, 17, '2010-12-03 06:55:32.665000', '2010-12-03 06:55:32.665000', 1220.93) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:32.677000', '2010-12-03 06:55:32.677000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('hillview green', NULL, 1281, 3, 18, '2010-12-03 06:55:32.681000', '2010-12-03 06:55:32.681000', 796.25) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:32.717000', '2010-12-03 06:55:32.717000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the plaza', NULL, 840, 2, 19, '2010-12-03 06:55:32.749000', '2010-12-03 06:55:32.749000', 1178.57) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'patrick poh - 傅敬烝' AND phone_number LIKE '98575031					') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('patrick poh - 傅敬烝', '98575031', '2010-12-03 06:55:32.761000', '2010-12-03 06:55:32.761000') RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shawn karan', '82888228', '2010-12-03 06:55:32.772000', '2010-12-03 06:55:32.772000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('livia', NULL, 1259, 3, 21, '2010-12-03 06:55:32.778000', '2010-12-03 06:55:32.778000', 900.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:32.801000', '2010-12-03 06:55:32.801000') RETURNING "id"[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the parc condominium', NULL, 980, 2, 22, '2010-12-03 06:55:32.810000', '2010-12-03 06:55:32.810000', 1000.0) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:32.818000', '2010-12-03 06:55:32.818000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('le m residence', NULL, 1001, 3, 23, '2010-12-03 06:55:32.824000', '2010-12-03 06:55:32.824000', 929.07) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'edwin lim' AND phone_number LIKE '84888899					') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('edwin lim', '84888899', '2010-12-03 06:55:32.834000', '2010-12-03 06:55:32.834000') RETURNING "id"[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('d''leedon (former farrer court)', NULL, 786, 2, 24, '2010-12-03 06:55:32.840000', '2010-12-03 06:55:32.840000', 1613.99) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'edwin lim' AND phone_number LIKE '84888899					') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('edwin lim', '84888899', '2010-12-03 06:55:32.852000', '2010-12-03 06:55:32.852000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('d''leedon (former farrer court)', NULL, 786, 2, 25, '2010-12-03 06:55:32.863000', '2010-12-03 06:55:32.863000', 1613.99) RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'dave teo' AND phone_number LIKE '97298200					') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('dave teo', '97298200', '2010-12-03 06:55:32.874000', '2010-12-03 06:55:32.874000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('springdale condo', NULL, 1162, 3, 26, '2010-12-03 06:55:32.885000', '2010-12-03 06:55:32.885000', 903.61) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'casey lim' AND phone_number LIKE '9066 2844 ') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('casey lim', '9066 2844', '2010-12-03 06:55:32.899000', '2010-12-03 06:55:32.899000') RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:32.931000', '2010-12-03 06:55:32.931000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('dahlia park condo', NULL, 1270, 3, 28, '2010-12-03 06:55:32.936000', '2010-12-03 06:55:32.936000', 724.41) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'kelvin er 余文玮' AND phone_number LIKE '84448004					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('kelvin er 余文玮', '84448004', '2010-12-03 06:55:32.951000', '2010-12-03 06:55:32.951000') RETURNING "id"[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('park natura', NULL, 1744, 4, 29, '2010-12-03 06:55:32.957000', '2010-12-03 06:55:32.957000', 1089.45) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'john chan' AND phone_number LIKE '83998248					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('john chan', '83998248', '2010-12-03 06:55:32.975000', '2010-12-03 06:55:32.975000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('costa del sol', NULL, 1798, 4, 30, '2010-12-03 06:55:32.995000', '2010-12-03 06:55:32.995000', 1390.43) RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jorge lau', '90909299', '2010-12-03 06:55:33.008000', '2010-12-03 06:55:33.008000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the callista', NULL, 1302, 3, 31, '2010-12-03 06:55:33.013000', '2010-12-03 06:55:33.013000', 844.85) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jorge lau', '90909299', '2010-12-03 06:55:33.019000', '2010-12-03 06:55:33.019000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the blossomvale', NULL, 1750, 4, 32, '2010-12-03 06:55:33.057000', '2010-12-03 06:55:33.057000', 1193.14) RETURNING "id"[0m
+  [4;36;1mAgent Load (2.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jorge lau', '90909299', '2010-12-03 06:55:33.084000', '2010-12-03 06:55:33.084000') RETURNING "id"[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the pier at robertson', NULL, 950, 2, 33, '2010-12-03 06:55:33.104000', '2010-12-03 06:55:33.104000', 1852.63) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shawn karan', '82888228', '2010-12-03 06:55:33.122000', '2010-12-03 06:55:33.122000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('livia', NULL, 1539, 4, 34, '2010-12-03 06:55:33.140000', '2010-12-03 06:55:33.140000', 870.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'joseph lim' AND phone_number LIKE '81984607					') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('joseph lim', '81984607', '2010-12-03 06:55:33.151000', '2010-12-03 06:55:33.151000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the trillium', NULL, 2390, 5, 35, '2010-12-03 06:55:33.156000', '2010-12-03 06:55:33.156000', 2301.26) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299					') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jorge lau', '90909299', '2010-12-03 06:55:33.167000', '2010-12-03 06:55:33.167000') RETURNING "id"[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the regalia', NULL, 1250, 3, 36, '2010-12-03 06:55:33.173000', '2010-12-03 06:55:33.173000', 1504.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jorge lau', '90909299', '2010-12-03 06:55:33.183000', '2010-12-03 06:55:33.183000') RETURNING "id"[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('pinewood gardens', NULL, 1650, 3, 37, '2010-12-03 06:55:33.189000', '2010-12-03 06:55:33.189000', 1575.76) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:33.200000', '2010-12-03 06:55:33.200000') RETURNING "id"[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('legenda @ joo chiat', NULL, 1270, 3, 38, '2010-12-03 06:55:33.206000', '2010-12-03 06:55:33.206000', 724.41) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jorge lau', '90909299', '2010-12-03 06:55:33.217000', '2010-12-03 06:55:33.217000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the aston', NULL, 1500, 3, 39, '2010-12-03 06:55:33.222000', '2010-12-03 06:55:33.222000', 1280.0) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299					') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jorge lau', '90909299', '2010-12-03 06:55:33.233000', '2010-12-03 06:55:33.233000') RETURNING "id"[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the aston', NULL, 1500, 3, 40, '2010-12-03 06:55:33.239000', '2010-12-03 06:55:33.239000', 1273.33) RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:33.246000', '2010-12-03 06:55:33.246000') RETURNING "id"[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('euphony gardens', NULL, 1152, 3, 41, '2010-12-03 06:55:33.251000', '2010-12-03 06:55:33.251000', 720.49) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:33.268000', '2010-12-03 06:55:33.268000') RETURNING "id"[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('regent grove', NULL, 1173, 3, 42, '2010-12-03 06:55:33.288000', '2010-12-03 06:55:33.288000', 639.39) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shawn karan', '82888228', '2010-12-03 06:55:33.326000', '2010-12-03 06:55:33.326000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('laguna park', NULL, 1615, 3, 43, '2010-12-03 06:55:33.332000', '2010-12-03 06:55:33.332000', 1100.0) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254					') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:55:33.343000', '2010-12-03 06:55:33.343000') RETURNING "id"[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the floravale', NULL, 1249, 3, 44, '2010-12-03 06:55:33.348000', '2010-12-03 06:55:33.348000', 608.49) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'edwin lim' AND phone_number LIKE '84888899					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('edwin lim', '84888899', '2010-12-03 06:55:33.359000', '2010-12-03 06:55:33.359000') RETURNING "id"[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('d''leedon (former farrer court)', NULL, 646, 1, 45, '2010-12-03 06:55:33.366000', '2010-12-03 06:55:33.366000', 1479.88) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'edwin lim' AND phone_number LIKE '84888899					') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('edwin lim', '84888899', '2010-12-03 06:55:33.376000', '2010-12-03 06:55:33.376000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('d''leedon (former farrer court)', NULL, 646, 1, 46, '2010-12-03 06:55:33.382000', '2010-12-03 06:55:33.382000', 1479.88) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'kee ng' AND phone_number LIKE '91841088					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('kee ng', '91841088', '2010-12-03 06:55:33.393000', '2010-12-03 06:55:33.393000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('springdale condo', NULL, 1180, 3, 47, '2010-12-03 06:55:33.398000', '2010-12-03 06:55:33.398000', 830.51) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228					') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shawn karan', '82888228', '2010-12-03 06:55:33.409000', '2010-12-03 06:55:33.409000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('citylights', NULL, 1421, 3, 48, '2010-12-03 06:55:33.415000', '2010-12-03 06:55:33.415000', 1370.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'ailsa ang' AND phone_number LIKE '98319833					') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('ailsa ang', '98319833', '2010-12-03 06:55:33.426000', '2010-12-03 06:55:33.426000') RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'ailsa ang' AND phone_number LIKE '98319833					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('ailsa ang', '98319833', '2010-12-03 06:55:33.480000', '2010-12-03 06:55:33.480000') RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'patrick poh - 傅敬烝' AND phone_number LIKE '98575031					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('patrick poh - 傅敬烝', '98575031', '2010-12-03 06:55:33.491000', '2010-12-03 06:55:33.491000') RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'albert hoo' AND phone_number LIKE '93892638					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('albert hoo', '93892638', '2010-12-03 06:55:33.515000', '2010-12-03 06:55:33.515000') RETURNING "id"[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('d''leedon (former farrer court)', NULL, 646, 1, 52, '2010-12-03 06:55:33.569000', '2010-12-03 06:55:33.569000', 1479.88) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228					') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shawn karan', '82888228', '2010-12-03 06:55:33.582000', '2010-12-03 06:55:33.582000') RETURNING "id"[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('citylights', NULL, 1421, 3, 53, '2010-12-03 06:55:33.590000', '2010-12-03 06:55:33.590000', 1530.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'patrick poh - 傅敬烝' AND phone_number LIKE '98575031					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('patrick poh - 傅敬烝', '98575031', '2010-12-03 06:55:33.600000', '2010-12-03 06:55:33.600000') RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'mimi lucinda' AND phone_number LIKE '91194645					') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('mimi lucinda', '91194645', '2010-12-03 06:55:33.609000', '2010-12-03 06:55:33.609000') RETURNING "id"[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('harvest mansion', NULL, 947, 2, 55, '2010-12-03 06:55:33.614000', '2010-12-03 06:55:33.614000', 906.02) RETURNING "id"[0m
+  [4;36;1mAgent Load (358.0ms)[0m   [0;1mSELECT * FROM "agents" [0m
+  [4;35;1mAgent Delete all (253.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (3)) [0m
+  [4;36;1mAgent Delete all (118.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (4)) [0m
+  [4;35;1mAgent Delete all (201.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (5)) [0m
+  [4;36;1mAgent Delete all (137.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (6)) [0m
+  [4;35;1mAgent Delete all (391.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (7)) [0m
+  [4;36;1mAgent Delete all (142.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (8)) [0m
+  [4;35;1mAgent Delete all (141.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (9)) [0m
+  [4;36;1mAgent Delete all (153.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (10)) [0m
+  [4;35;1mAgent Delete all (159.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (11)) [0m
+  [4;36;1mAgent Delete all (444.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (12)) [0m
+  [4;35;1mAgent Delete all (123.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (13)) [0m
+  [4;36;1mAgent Delete all (201.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (14)) [0m
+  [4;35;1mAgent Delete all (67.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (15)) [0m
+  [4;36;1mAgent Delete all (336.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (16)) [0m
+  [4;35;1mAgent Delete all (84.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (17)) [0m
+  [4;36;1mAgent Delete all (219.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (18)) [0m
+  [4;35;1mAgent Delete all (137.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (19)) [0m
+  [4;36;1mAgent Delete all (89.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (20)) [0m
+  [4;35;1mAgent Delete all (155.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (21)) [0m
+  [4;36;1mAgent Delete all (86.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (22)) [0m
+  [4;35;1mAgent Delete all (131.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (23)) [0m
+  [4;36;1mAgent Delete all (146.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (24)) [0m
+  [4;35;1mAgent Delete all (92.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (25)) [0m
+  [4;36;1mAgent Delete all (161.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (26)) [0m
+  [4;35;1mAgent Delete all (207.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (27)) [0m
+  [4;36;1mAgent Delete all (79.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (28)) [0m
+  [4;35;1mAgent Delete all (25.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (29)) [0m
+  [4;36;1mAgent Delete all (55.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (30)) [0m
+  [4;35;1mAgent Delete all (76.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (31)) [0m
+  [4;36;1mAgent Delete all (123.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (32)) [0m
+  [4;35;1mAgent Delete all (45.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (33)) [0m
+  [4;36;1mAgent Delete all (103.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (34)) [0m
+  [4;35;1mAgent Delete all (178.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (35)) [0m
+  [4;36;1mAgent Delete all (74.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (36)) [0m
+  [4;35;1mAgent Delete all (140.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (37)) [0m
+  [4;36;1mAgent Delete all (97.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (38)) [0m
+  [4;35;1mAgent Delete all (134.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (39)) [0m
+  [4;36;1mAgent Delete all (20.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (40)) [0m
+  [4;35;1mAgent Delete all (119.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (41)) [0m
+  [4;36;1mAgent Delete all (23.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (42)) [0m
+  [4;35;1mAgent Delete all (27.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (43)) [0m
+  [4;36;1mAgent Delete all (102.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (44)) [0m
+  [4;35;1mAgent Delete all (67.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (45)) [0m
+  [4;36;1mAgent Delete all (129.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (46)) [0m
+  [4;35;1mAgent Delete all (27.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (47)) [0m
+  [4;36;1mAgent Delete all (83.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (48)) [0m
+  [4;35;1mAgent Delete all (96.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (49)) [0m
+  [4;36;1mAgent Delete all (87.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (50)) [0m
+  [4;35;1mAgent Delete all (103.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (51)) [0m
+  [4;36;1mAgent Delete all (317.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (52)) [0m
+  [4;35;1mAgent Delete all (77.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (53)) [0m
+  [4;36;1mAgent Delete all (82.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (54)) [0m
+  [4;35;1mAgent Delete all (65.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (55)) [0m
+  [4;36;1mCondo Load (7.0ms)[0m   [0;1mSELECT * FROM "condos" [0m
+  [4;35;1mCondo Delete all (31.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (1)) [0m
+  [4;36;1mCondo Delete all (43.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (2)) [0m
+  [4;35;1mCondo Delete all (55.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (3)) [0m
+  [4;36;1mCondo Delete all (45.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (4)) [0m
+  [4;35;1mCondo Delete all (47.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (5)) [0m
+  [4;36;1mCondo Delete all (24.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (6)) [0m
+  [4;35;1mCondo Delete all (133.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (7)) [0m
+  [4;36;1mCondo Delete all (58.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (8)) [0m
+  [4;35;1mCondo Delete all (121.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (9)) [0m
+  [4;36;1mCondo Delete all (97.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (10)) [0m
+  [4;35;1mCondo Delete all (62.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (11)) [0m
+  [4;36;1mCondo Delete all (105.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (12)) [0m
+  [4;35;1mCondo Delete all (178.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (13)) [0m
+  [4;36;1mCondo Delete all (92.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (14)) [0m
+  [4;35;1mCondo Delete all (102.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (15)) [0m
+  [4;36;1mCondo Delete all (160.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (16)) [0m
+  [4;35;1mCondo Delete all (48.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (17)) [0m
+  [4;36;1mCondo Delete all (100.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (18)) [0m
+  [4;35;1mCondo Delete all (136.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (19)) [0m
+  [4;36;1mCondo Delete all (80.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (20)) [0m
+  [4;35;1mCondo Delete all (199.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (21)) [0m
+  [4;36;1mCondo Delete all (159.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (22)) [0m
+  [4;35;1mCondo Delete all (115.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (23)) [0m
+  [4;36;1mCondo Delete all (146.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (24)) [0m
+  [4;35;1mCondo Delete all (59.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (25)) [0m
+  [4;36;1mCondo Delete all (130.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (26)) [0m
+  [4;35;1mCondo Delete all (105.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (27)) [0m
+  [4;36;1mCondo Delete all (47.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (28)) [0m
+  [4;35;1mCondo Delete all (629.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (29)) [0m
+  [4;36;1mCondo Delete all (115.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (30)) [0m
+  [4;35;1mCondo Delete all (108.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (31)) [0m
+  [4;36;1mCondo Delete all (133.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (32)) [0m
+  [4;35;1mCondo Delete all (85.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (33)) [0m
+  [4;36;1mCondo Delete all (158.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (34)) [0m
+  [4;35;1mCondo Delete all (135.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (35)) [0m
+  [4;36;1mCondo Delete all (104.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (36)) [0m
+  [4;35;1mCondo Delete all (51.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (37)) [0m
+  [4;36;1mCondo Delete all (93.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (38)) [0m
+  [4;35;1mCondo Delete all (138.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (39)) [0m
+  [4;36;1mCondo Delete all (113.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (40)) [0m
+  [4;35;1mCondo Delete all (150.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (41)) [0m
+  [4;36;1mCondo Delete all (66.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (42)) [0m
+  [4;35;1mCondo Delete all (84.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (43)) [0m
+  [4;36;1mCondo Delete all (96.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (44)) [0m
+  [4;35;1mAgent Load (2.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228') LIMIT 1[0m
+  [4;36;1mPK and serial sequence (7.0ms)[0m   [0;1m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'agents'::regclass
+[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSELECT version()[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shawn karan', '82888228', '2010-12-03 06:58:21.261000', '2010-12-03 06:58:21.261000') RETURNING "id"[0m
+  [4;35;1mPK and serial sequence (3.0ms)[0m   [0m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'condos'::regclass
+[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('one amber', NULL, 2088, 3, 56, '2010-12-03 06:58:21.394000', '2010-12-03 06:58:21.394000', 1300.0) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'joseph lim' AND phone_number LIKE '81984607') LIMIT 1[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('joseph lim', '81984607', '2010-12-03 06:58:21.495000', '2010-12-03 06:58:21.495000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the trillium', NULL, 1399, 2, 57, '2010-12-03 06:58:21.558000', '2010-12-03 06:58:21.558000', 2358.83) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'popular land pte ltd' AND phone_number LIKE '6462 9510') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('popular land pte ltd', '6462 9510', '2010-12-03 06:58:21.677000', '2010-12-03 06:58:21.677000') RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'albert hoo' AND phone_number LIKE '93892638') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('albert hoo', '93892638', '2010-12-03 06:58:21.830000', '2010-12-03 06:58:21.830000') RETURNING "id"[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('d''leedon (former farrer court)', NULL, 893, 2, 59, '2010-12-03 06:58:21.943000', '2010-12-03 06:58:21.943000', 1493.51) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 06:58:22.051000', '2010-12-03 06:58:22.051000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('far horizon gardens', NULL, 1949, 3, 60, '2010-12-03 06:58:22.129000', '2010-12-03 06:58:22.129000', 667.01) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('one oxley rise', NULL, 721, 2, 56, '2010-12-03 06:58:22.210000', '2010-12-03 06:58:22.210000', 2050.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('kerrisdale', NULL, 1270, 3, 60, '2010-12-03 06:58:22.338000', '2010-12-03 06:58:22.338000', 1000.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'serene ng' AND phone_number LIKE '98894411') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('serene ng', '98894411', '2010-12-03 06:58:22.426000', '2010-12-03 06:58:22.426000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('pavilion 11', NULL, 1313, 3, 61, '2010-12-03 06:58:22.555000', '2010-12-03 06:58:22.555000', 1357.2) RETURNING "id"[0m
+  [4;35;1mAgent Load (2.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('oxford suites', NULL, 1033, 2, 56, '2010-12-03 06:58:22.594000', '2010-12-03 06:58:22.594000', 1450.0) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the pier at robertson', NULL, 678, 1, 60, '2010-12-03 06:58:22.708000', '2010-12-03 06:58:22.708000', 1843.66) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('joo chiat mansion', NULL, 1080, 3, 60, '2010-12-03 06:58:22.872000', '2010-12-03 06:58:22.872000', 1157.41) RETURNING "id"[0m
+  [4;35;1mAgent Load (2.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'kenny ewe' AND phone_number LIKE '90228209') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('kenny ewe', '90228209', '2010-12-03 06:58:22.894000', '2010-12-03 06:58:22.894000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('city square residences', NULL, 1206, 3, 62, '2010-12-03 06:58:22.946000', '2010-12-03 06:58:22.946000', 1393.03) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'joseph lim' AND phone_number LIKE '81984607') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the trillium', NULL, 1798, 3, 57, '2010-12-03 06:58:23.003000', '2010-12-03 06:58:23.003000', 2169.08) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE NULL AND phone_number LIKE NULL) LIMIT 1[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('maysprings', NULL, 1346, 3, 56, '2010-12-03 06:58:23.151000', '2010-12-03 06:58:23.151000', 760.0) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'edwin lim' AND phone_number LIKE '84888899') LIMIT 1[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('edwin lim', '84888899', '2010-12-03 06:58:23.244000', '2010-12-03 06:58:23.244000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('legenda @ joo chiat', NULL, 1238, 3, 63, '2010-12-03 06:58:23.267000', '2010-12-03 06:58:23.267000', 743.13) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('kentish green', NULL, 1313, 3, 60, '2010-12-03 06:58:23.333000', '2010-12-03 06:58:23.333000', 898.71) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'william .' AND phone_number LIKE '81028866') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('william .', '81028866', '2010-12-03 06:58:23.433000', '2010-12-03 06:58:23.433000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('leonie hill residences', NULL, 1389, 3, 64, '2010-12-03 06:58:23.527000', '2010-12-03 06:58:23.527000', 2199.42) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'patrick poh - 傅敬烝' AND phone_number LIKE '98575031') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('patrick poh - 傅敬烝', '98575031', '2010-12-03 06:58:23.596000', '2010-12-03 06:58:23.596000') RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('butterworth 8', NULL, 1023, 2, 60, '2010-12-03 06:58:23.682000', '2010-12-03 06:58:23.682000', 1094.82) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228') LIMIT 1[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('mackenzie 88', NULL, 710, 1, 56, '2010-12-03 06:58:23.733000', '2010-12-03 06:58:23.733000', 1550.0) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'edwin lim' AND phone_number LIKE '84888899') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('d''leedon (former farrer court)', NULL, 1173, 3, 63, '2010-12-03 06:58:23.769000', '2010-12-03 06:58:23.769000', 1530.26) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('icon', NULL, 657, 1, 60, '2010-12-03 06:58:23.866000', '2010-12-03 06:58:23.866000', 1748.86) RETURNING "id"[0m
+  [4;35;1mAgent Load (2.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('dover parkview', NULL, 1216, 2, 60, '2010-12-03 06:58:24.080000', '2010-12-03 06:58:24.080000', 921.05) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'orangetee new homes' AND phone_number LIKE '64710088') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('orangetee new homes', '64710088', '2010-12-03 06:58:24.180000', '2010-12-03 06:58:24.180000') RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('gloucester mansions', NULL, 657, 1, 60, '2010-12-03 06:58:24.343000', '2010-12-03 06:58:24.343000', 1613.39) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('pebble bay', NULL, 860, 1, 60, '2010-12-03 06:58:24.442000', '2010-12-03 06:58:24.442000', 1220.93) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('hillview green', NULL, 1281, 3, 60, '2010-12-03 06:58:24.519000', '2010-12-03 06:58:24.519000', 796.25) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the plaza', NULL, 840, 2, 60, '2010-12-03 06:58:24.542000', '2010-12-03 06:58:24.542000', 1178.57) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'patrick poh - 傅敬烝' AND phone_number LIKE '98575031') LIMIT 1[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('livia', NULL, 1259, 3, 56, '2010-12-03 06:58:24.666000', '2010-12-03 06:58:24.666000', 900.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the parc condominium', NULL, 980, 2, 60, '2010-12-03 06:58:24.722000', '2010-12-03 06:58:24.722000', 1000.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('le m residence', NULL, 1001, 3, 60, '2010-12-03 06:58:24.751000', '2010-12-03 06:58:24.751000', 929.07) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'edwin lim' AND phone_number LIKE '84888899') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('d''leedon (former farrer court)', NULL, 786, 2, 63, '2010-12-03 06:58:24.867000', '2010-12-03 06:58:24.867000', 1613.99) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'dave teo' AND phone_number LIKE '97298200') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('dave teo', '97298200', '2010-12-03 06:58:24.912000', '2010-12-03 06:58:24.912000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('springdale condo', NULL, 1162, 3, 67, '2010-12-03 06:58:24.949000', '2010-12-03 06:58:24.949000', 903.61) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('dahlia park condo', NULL, 1270, 3, 60, '2010-12-03 06:58:25.084000', '2010-12-03 06:58:25.084000', 724.41) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'kelvin er 余文玮' AND phone_number LIKE '84448004') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('kelvin er 余文玮', '84448004', '2010-12-03 06:58:25.196000', '2010-12-03 06:58:25.196000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('park natura', NULL, 1744, 4, 68, '2010-12-03 06:58:25.267000', '2010-12-03 06:58:25.267000', 1089.45) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'john chan' AND phone_number LIKE '83998248') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('john chan', '83998248', '2010-12-03 06:58:25.390000', '2010-12-03 06:58:25.390000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('costa del sol', NULL, 1798, 4, 69, '2010-12-03 06:58:25.494000', '2010-12-03 06:58:25.494000', 1390.43) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jorge lau', '90909299', '2010-12-03 06:58:25.615000', '2010-12-03 06:58:25.615000') RETURNING "id"[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the callista', NULL, 1302, 3, 70, '2010-12-03 06:58:25.665000', '2010-12-03 06:58:25.665000', 844.85) RETURNING "id"[0m
+  [4;36;1mAgent Load (2.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the blossomvale', NULL, 1750, 4, 70, '2010-12-03 06:58:25.751000', '2010-12-03 06:58:25.751000', 1193.14) RETURNING "id"[0m
+  [4;36;1mAgent Load (2.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the pier at robertson', NULL, 950, 2, 70, '2010-12-03 06:58:25.811000', '2010-12-03 06:58:25.811000', 1893.68) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('livia', NULL, 1539, 4, 56, '2010-12-03 06:58:25.888000', '2010-12-03 06:58:25.888000', 870.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'joseph lim' AND phone_number LIKE '81984607') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the trillium', NULL, 2390, 5, 57, '2010-12-03 06:58:25.977000', '2010-12-03 06:58:25.977000', 2301.26) RETURNING "id"[0m
+  [4;36;1mAgent Load (4.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the regalia', NULL, 1250, 3, 70, '2010-12-03 06:58:26.105000', '2010-12-03 06:58:26.105000', 1504.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('pinewood gardens', NULL, 1650, 3, 70, '2010-12-03 06:58:26.176000', '2010-12-03 06:58:26.176000', 1575.76) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('legenda @ joo chiat', NULL, 1270, 3, 60, '2010-12-03 06:58:26.288000', '2010-12-03 06:58:26.288000', 724.41) RETURNING "id"[0m
+  [4;36;1mAgent Load (4.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299') LIMIT 1[0m
+  [4;35;1mSQL (124.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the aston', NULL, 1500, 3, 70, '2010-12-03 06:58:26.556000', '2010-12-03 06:58:26.556000', 1280.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jorge lau' AND phone_number LIKE '90909299') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the aston', NULL, 1500, 3, 70, '2010-12-03 06:58:26.830000', '2010-12-03 06:58:26.830000', 1273.33) RETURNING "id"[0m
+  [4;36;1mAgent Load (2.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('euphony gardens', NULL, 1152, 3, 60, '2010-12-03 06:58:26.883000', '2010-12-03 06:58:26.883000', 720.49) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('regent grove', NULL, 1173, 3, 60, '2010-12-03 06:58:27.033000', '2010-12-03 06:58:27.033000', 639.39) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shawn karan' AND phone_number LIKE '82888228') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('laguna park', NULL, 1615, 3, 56, '2010-12-03 06:58:27.153000', '2010-12-03 06:58:27.153000', 1100.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (2.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the floravale', NULL, 1249, 3, 60, '2010-12-03 06:58:27.249000', '2010-12-03 06:58:27.249000', 608.49) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'edwin lim' AND phone_number LIKE '84888899') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "price", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('d''leedon (former farrer court)', NULL, 646, 1, 63, '2010-12-03 06:58:27.354000', '2010-12-03 06:58:27.354000', 1479.88) RETURNING "id"[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+Migrating to CreateCondos (20101203023931)
+Migrating to CreateAgents (20101203024313)
+Migrating to RemovePricePerSquareFeetFromCondos (20101203062758)
+Migrating to AddPricePerSquareFeetToCondos (20101203062943)
+Migrating to RemovePricesFromCondos (20101203072251)
+  [4;35;1mSQL (540.0ms)[0m   [0mALTER TABLE "condos" DROP "price"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSELECT version()[0m
+  [4;35;1mPK and serial sequence (6.0ms)[0m   [0m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'schema_migrations'::regclass
+[0m
+  [4;36;1mPK and custom sequence (6.0ms)[0m   [0;1m SELECT attr.attname,
+ CASE
+ WHEN split_part(def.adsrc, '''', 2) ~ '.' THEN
+ substr(split_part(def.adsrc, '''', 2),
+ strpos(split_part(def.adsrc, '''', 2), '.')+1)
+ ELSE split_part(def.adsrc, '''', 2)
+ END as relname
+ FROM pg_class t
+ JOIN pg_attribute attr ON (t.oid = attrelid)
+ JOIN pg_attrdef def ON (adrelid = attrelid AND adnum = attnum)
+ JOIN pg_constraint cons ON (conrelid = adrelid AND adnum = conkey[1])
+ WHERE t.oid = 'schema_migrations'::regclass
+ AND cons.contype = 'p'
+ AND def.adsrc ~* 'nextval'
+[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20101203072251')[0m
+  [4;36;1mPK and serial sequence (4.0ms)[0m   [0;1m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'schema_migrations'::regclass
+[0m
+  [4;35;1mPK and custom sequence (1.0ms)[0m   [0m SELECT attr.attname,
+ CASE
+ WHEN split_part(def.adsrc, '''', 2) ~ '.' THEN
+ substr(split_part(def.adsrc, '''', 2),
+ strpos(split_part(def.adsrc, '''', 2), '.')+1)
+ ELSE split_part(def.adsrc, '''', 2)
+ END as relname
+ FROM pg_class t
+ JOIN pg_attribute attr ON (t.oid = attrelid)
+ JOIN pg_attrdef def ON (adrelid = attrelid AND adnum = attnum)
+ JOIN pg_constraint cons ON (conrelid = adrelid AND adnum = conkey[1])
+ WHERE t.oid = 'schema_migrations'::regclass
+ AND cons.contype = 'p'
+ AND def.adsrc ~* 'nextval'
+[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mPK and serial sequence (3.0ms)[0m   [0m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'agents'::regclass
+[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1m SELECT i.relname, d.indisunique, a.attname
+ FROM pg_class t, pg_class i, pg_index d, pg_attribute a
+ WHERE i.relkind = 'i'
+ AND d.indexrelid = i.oid
+ AND d.indisprimary = 'f'
+ AND t.oid = d.indrelid
+ AND t.relname = 'agents'
+ AND a.attrelid = t.oid
+ AND ( d.indkey[0]=a.attnum OR d.indkey[1]=a.attnum
+ OR d.indkey[2]=a.attnum OR d.indkey[3]=a.attnum
+ OR d.indkey[4]=a.attnum OR d.indkey[5]=a.attnum
+ OR d.indkey[6]=a.attnum OR d.indkey[7]=a.attnum
+ OR d.indkey[8]=a.attnum OR d.indkey[9]=a.attnum )
+ ORDER BY i.relname
+[0m
+  [4;35;1mPK and serial sequence (3.0ms)[0m   [0m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'condos'::regclass
+[0m
+  [4;36;1mSQL (3.0ms)[0m   [0;1m SELECT i.relname, d.indisunique, a.attname
+ FROM pg_class t, pg_class i, pg_index d, pg_attribute a
+ WHERE i.relkind = 'i'
+ AND d.indexrelid = i.oid
+ AND d.indisprimary = 'f'
+ AND t.oid = d.indrelid
+ AND t.relname = 'condos'
+ AND a.attrelid = t.oid
+ AND ( d.indkey[0]=a.attnum OR d.indkey[1]=a.attnum
+ OR d.indkey[2]=a.attnum OR d.indkey[3]=a.attnum
+ OR d.indkey[4]=a.attnum OR d.indkey[5]=a.attnum
+ OR d.indkey[6]=a.attnum OR d.indkey[7]=a.attnum
+ OR d.indkey[8]=a.attnum OR d.indkey[9]=a.attnum )
+ ORDER BY i.relname
+[0m
+  [4;36;1mAgent Load (4.0ms)[0m   [0;1mSELECT * FROM "agents" [0m
+  [4;35;1mAgent Delete all (2.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (56)) [0m
+  [4;36;1mAgent Delete all (1.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (57)) [0m
+  [4;35;1mAgent Delete all (25.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (58)) [0m
+  [4;36;1mAgent Delete all (16.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (59)) [0m
+  [4;35;1mAgent Delete all (1.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (60)) [0m
+  [4;36;1mAgent Delete all (1.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (61)) [0m
+  [4;35;1mAgent Delete all (33.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (62)) [0m
+  [4;36;1mAgent Delete all (17.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (63)) [0m
+  [4;35;1mAgent Delete all (2.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (64)) [0m
+  [4;36;1mAgent Delete all (1.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (65)) [0m
+  [4;35;1mAgent Delete all (1.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (66)) [0m
+  [4;36;1mAgent Delete all (0.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (67)) [0m
+  [4;35;1mAgent Delete all (2.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (68)) [0m
+  [4;36;1mAgent Delete all (1.0ms)[0m   [0;1mDELETE FROM "agents" WHERE ("id" IN (69)) [0m
+  [4;35;1mAgent Delete all (1.0ms)[0m   [0mDELETE FROM "agents" WHERE ("id" IN (70)) [0m
+  [4;36;1mCondo Load (6.0ms)[0m   [0;1mSELECT * FROM "condos" [0m
+  [4;35;1mCondo Delete all (1.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (45)) [0m
+  [4;36;1mCondo Delete all (0.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (46)) [0m
+  [4;35;1mCondo Delete all (4.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (47)) [0m
+  [4;36;1mCondo Delete all (1.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (48)) [0m
+  [4;35;1mCondo Delete all (0.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (49)) [0m
+  [4;36;1mCondo Delete all (0.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (50)) [0m
+  [4;35;1mCondo Delete all (4.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (51)) [0m
+  [4;36;1mCondo Delete all (1.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (52)) [0m
+  [4;35;1mCondo Delete all (3.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (53)) [0m
+  [4;36;1mCondo Delete all (1.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (54)) [0m
+  [4;35;1mCondo Delete all (1.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (55)) [0m
+  [4;36;1mCondo Delete all (1.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (56)) [0m
+  [4;35;1mCondo Delete all (1.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (57)) [0m
+  [4;36;1mCondo Delete all (3.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (58)) [0m
+  [4;35;1mCondo Delete all (1.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (59)) [0m
+  [4;36;1mCondo Delete all (1.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (60)) [0m
+  [4;35;1mCondo Delete all (0.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (61)) [0m
+  [4;36;1mCondo Delete all (5.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (62)) [0m
+  [4;35;1mCondo Delete all (1.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (63)) [0m
+  [4;36;1mCondo Delete all (5.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (64)) [0m
+  [4;35;1mCondo Delete all (1.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (65)) [0m
+  [4;36;1mCondo Delete all (2.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (66)) [0m
+  [4;35;1mCondo Delete all (23.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (67)) [0m
+  [4;36;1mCondo Delete all (36.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (68)) [0m
+  [4;35;1mCondo Delete all (2.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (69)) [0m
+  [4;36;1mCondo Delete all (5.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (70)) [0m
+  [4;35;1mCondo Delete all (1.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (71)) [0m
+  [4;36;1mCondo Delete all (1.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (72)) [0m
+  [4;35;1mCondo Delete all (28.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (73)) [0m
+  [4;36;1mCondo Delete all (0.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (74)) [0m
+  [4;35;1mCondo Delete all (1.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (75)) [0m
+  [4;36;1mCondo Delete all (1.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (76)) [0m
+  [4;35;1mCondo Delete all (15.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (77)) [0m
+  [4;36;1mCondo Delete all (2.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (78)) [0m
+  [4;35;1mCondo Delete all (4.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (79)) [0m
+  [4;36;1mCondo Delete all (2.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (80)) [0m
+  [4;35;1mCondo Delete all (2.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (81)) [0m
+  [4;36;1mCondo Delete all (4.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (82)) [0m
+  [4;35;1mCondo Delete all (1.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (83)) [0m
+  [4;36;1mCondo Delete all (2.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (84)) [0m
+  [4;35;1mCondo Delete all (3.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (85)) [0m
+  [4;36;1mCondo Delete all (2.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (86)) [0m
+  [4;35;1mCondo Delete all (2.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (87)) [0m
+  [4;36;1mCondo Delete all (1.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (88)) [0m
+  [4;35;1mCondo Delete all (6.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (89)) [0m
+  [4;36;1mCondo Delete all (2.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (90)) [0m
+  [4;35;1mCondo Delete all (3.0ms)[0m   [0mDELETE FROM "condos" WHERE ("id" IN (91)) [0m
+  [4;36;1mCondo Delete all (2.0ms)[0m   [0;1mDELETE FROM "condos" WHERE ("id" IN (92)) [0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'lawrence lim' AND phone_number LIKE '97110888') LIMIT 1[0m
+  [4;36;1mPK and serial sequence (8.0ms)[0m   [0;1m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'agents'::regclass
+[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSELECT version()[0m
+  [4;36;1mSQL (5.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('lawrence lim', '97110888', '2010-12-03 07:26:07.440000', '2010-12-03 07:26:07.440000') RETURNING "id"[0m
+  [4;35;1mPK and serial sequence (3.0ms)[0m   [0m SELECT attr.attname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'condos'::regclass
+[0m
+  [4;36;1mSQL (18.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the cascadia', 1485, 4, 71, '2010-12-03 07:26:07.484000', '2010-12-03 07:26:07.484000', 1374.39) RETURNING "id"[0m
+  [4;35;1mAgent Load (6.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'larry woo' AND phone_number LIKE '96873076') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('larry woo', '96873076', '2010-12-03 07:26:07.586000', '2010-12-03 07:26:07.586000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the seafront on meyer', 1604, 3, 72, '2010-12-03 07:26:07.615000', '2010-12-03 07:26:07.615000', 1600.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'popular land pte ltd' AND phone_number LIKE '6462 9510') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('popular land pte ltd', '6462 9510', '2010-12-03 07:26:07.645000', '2010-12-03 07:26:07.645000') RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'eddy ang' AND phone_number LIKE '96966535') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('eddy ang', '96966535', '2010-12-03 07:26:07.672000', '2010-12-03 07:26:07.672000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the oceanfront @ sentosa cove', 1711, 3, 74, '2010-12-03 07:26:07.681000', '2010-12-03 07:26:07.681000', 2199.88) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'lynn ong' AND phone_number LIKE '84793149') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('lynn ong', '84793149', '2010-12-03 07:26:07.697000', '2010-12-03 07:26:07.697000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('pow wow listing!!! marina bay residences', 1060, 2, 75, '2010-12-03 07:26:07.707000', '2010-12-03 07:26:07.707000', 2800.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'sean chia' AND phone_number LIKE '96313303') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('sean chia', '96313303', '2010-12-03 07:26:07.718000', '2010-12-03 07:26:07.718000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('twin regency', 1442, 3, 76, '2010-12-03 07:26:07.739000', '2010-12-03 07:26:07.739000', 1352.29) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'jason lee' AND phone_number LIKE '97431100') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jason lee', '97431100', '2010-12-03 07:26:07.752000', '2010-12-03 07:26:07.752000') RETURNING "id"[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('nv residences', 495, 1, 77, '2010-12-03 07:26:07.769000', '2010-12-03 07:26:07.769000', 1171.72) RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'lynette tan' AND phone_number LIKE '97839675') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('lynette tan', '97839675', '2010-12-03 07:26:07.787000', '2010-12-03 07:26:07.787000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('villa marina', 1152, 3, 78, '2010-12-03 07:26:07.794000', '2010-12-03 07:26:07.794000', 850.69) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'larry woo' AND phone_number LIKE '96873076') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the seafront on meyer', 1066, 2, 72, '2010-12-03 07:26:07.817000', '2010-12-03 07:26:07.817000', 1500.94) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'andrew koh' AND phone_number LIKE '96562823') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('andrew koh', '96562823', '2010-12-03 07:26:07.830000', '2010-12-03 07:26:07.830000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('lagoon view', 1670, 3, 79, '2010-12-03 07:26:07.839000', '2010-12-03 07:26:07.839000', 868.26) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'larry woo' AND phone_number LIKE '96873076') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the ford @ holland', 3194, 4, 72, '2010-12-03 07:26:07.852000', '2010-12-03 07:26:07.852000', 1408.89) RETURNING "id"[0m
+  [4;36;1mAgent Load (2.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jason ang' AND phone_number LIKE '96880751') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jason ang', '96880751', '2010-12-03 07:26:07.864000', '2010-12-03 07:26:07.864000') RETURNING "id"[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('one amber', 1615, 4, 80, '2010-12-03 07:26:07.874000', '2010-12-03 07:26:07.874000', 1299.69) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'larry woo' AND phone_number LIKE '96873076') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('grange residences', 2583, 4, 72, '2010-12-03 07:26:07.889000', '2010-12-03 07:26:07.889000', 2787.46) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE NULL AND phone_number LIKE NULL) LIMIT 1[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'eddy ang' AND phone_number LIKE '96966535') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('hillview heights', 980, 2, 74, '2010-12-03 07:26:07.920000', '2010-12-03 07:26:07.920000', 867.35) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'wendy tan' AND phone_number LIKE '97896222') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('wendy tan', '97896222', '2010-12-03 07:26:07.931000', '2010-12-03 07:26:07.931000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('reflections at keppel bay', 850, 2, 81, '2010-12-03 07:26:07.947000', '2010-12-03 07:26:07.947000', 1858.82) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'jiawei tan' AND phone_number LIKE '81289565') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jiawei tan', '81289565', '2010-12-03 07:26:07.959000', '2010-12-03 07:26:07.959000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the metropolitan condominium', 1399, 3, 82, '2010-12-03 07:26:07.977000', '2010-12-03 07:26:07.977000', 1107.93) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jenie thong' AND phone_number LIKE '94550309') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jenie thong', '94550309', '2010-12-03 07:26:07.992000', '2010-12-03 07:26:07.992000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('sophia residence', 1324, 3, 83, '2010-12-03 07:26:07.998000', '2010-12-03 07:26:07.998000', 1779.27) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'larry woo' AND phone_number LIKE '96873076') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('tribeca by the waterfront', 1905, 4, 72, '2010-12-03 07:26:08.034000', '2010-12-03 07:26:08.034000', 2000.0) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'jiawei tan' AND phone_number LIKE '81289565') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the metropolitan condominium', 1033, 2, 82, '2010-12-03 07:26:08.043000', '2010-12-03 07:26:08.043000', 1258.47) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'larry woo' AND phone_number LIKE '96873076') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('four seasons park', 2873, 4, 72, '2010-12-03 07:26:08.063000', '2010-12-03 07:26:08.063000', 3028.19) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'eddy ang' AND phone_number LIKE '96966535') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('hazel park condo', 980, 2, 74, '2010-12-03 07:26:08.077000', '2010-12-03 07:26:08.077000', 897.96) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'alvin sim' AND phone_number LIKE '83883533') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('alvin sim', '83883533', '2010-12-03 07:26:08.094000', '2010-12-03 07:26:08.094000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('iresidences', 1066, 2, 84, '2010-12-03 07:26:08.100000', '2010-12-03 07:26:08.100000', 1172.61) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jason lee' AND phone_number LIKE '97431100') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('bella casitafh frm $6xxk only', 506, 1, 77, '2010-12-03 07:26:08.114000', '2010-12-03 07:26:08.114000', 1225.3) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'orangetee new homes' AND phone_number LIKE '64710088') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('orangetee new homes', '64710088', '2010-12-03 07:26:08.123000', '2010-12-03 07:26:08.123000') RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jonie yosores' AND phone_number LIKE '94564677') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('jonie yosores', '94564677', '2010-12-03 07:26:08.138000', '2010-12-03 07:26:08.138000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the bayshore', 958, 2, 86, '2010-12-03 07:26:08.151000', '2010-12-03 07:26:08.151000', 897.7) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'jonie yosores' AND phone_number LIKE '94564677') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('pebble bay', 2626, 4, 86, '2010-12-03 07:26:08.160000', '2010-12-03 07:26:08.160000', 1400.0) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'edwin lim' AND phone_number LIKE '84888899') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('edwin lim', '84888899', '2010-12-03 07:26:08.173000', '2010-12-03 07:26:08.173000') RETURNING "id"[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('d''leedon (former farrer court)', 1270, 3, 87, '2010-12-03 07:26:08.180000', '2010-12-03 07:26:08.180000', 1545.2) RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jonie yosores' AND phone_number LIKE '94564677') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('one amber', 1701, 4, 86, '2010-12-03 07:26:08.200000', '2010-12-03 07:26:08.200000', 1250.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jonie yosores' AND phone_number LIKE '94564677') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('neptune court', 1636, 3, 86, '2010-12-03 07:26:08.259000', '2010-12-03 07:26:08.259000', 929.1) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jonie yosores' AND phone_number LIKE '94564677') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('one amber', 1302, 3, 86, '2010-12-03 07:26:08.289000', '2010-12-03 07:26:08.289000', 1259.6) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jonie yosores' AND phone_number LIKE '94564677') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('dakota residences', 1292, 3, 86, '2010-12-03 07:26:08.314000', '2010-12-03 07:26:08.314000', 1350.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'larry woo' AND phone_number LIKE '96873076') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the trillium', 2218, 4, 72, '2010-12-03 07:26:08.322000', '2010-12-03 07:26:08.322000', 2200.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jonie yosores' AND phone_number LIKE '94564677') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('costa rhu', 4200, 4, 86, '2010-12-03 07:26:08.330000', '2010-12-03 07:26:08.330000', 1309.52) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jonie yosores' AND phone_number LIKE '94564677') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('costa del sol', 1324, 3, 86, '2010-12-03 07:26:08.338000', '2010-12-03 07:26:08.338000', 1100.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jonie yosores' AND phone_number LIKE '94564677') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the makena', 1658, 3, 86, '2010-12-03 07:26:08.355000', '2010-12-03 07:26:08.355000', 1145.96) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jiawei tan' AND phone_number LIKE '81289565') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the metropolitan condominium', 721, 2, 82, '2010-12-03 07:26:08.378000', '2010-12-03 07:26:08.378000', 1428.57) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jonie yosores' AND phone_number LIKE '94564677') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the bayshore', 1238, 3, 86, '2010-12-03 07:26:08.388000', '2010-12-03 07:26:08.388000', 848.14) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jenie thong' AND phone_number LIKE '94550309') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('sophia residence', 2540, 3, 83, '2010-12-03 07:26:08.397000', '2010-12-03 07:26:08.397000', 1271.84) RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'shara soh' AND phone_number LIKE '93477254') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('shara soh', '93477254', '2010-12-03 07:26:08.405000', '2010-12-03 07:26:08.405000') RETURNING "id"[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('cote d''azur', 1324, 3, 88, '2010-12-03 07:26:08.410000', '2010-12-03 07:26:08.410000', 1253.78) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'larry woo' AND phone_number LIKE '96873076') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('belle vue residences', 1450, 2, 72, '2010-12-03 07:26:08.421000', '2010-12-03 07:26:08.421000', 2758.62) RETURNING "id"[0m
+  [4;35;1mAgent Load (0.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'larry woo' AND phone_number LIKE '96873076') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the trillium', 1400, 3, 72, '2010-12-03 07:26:08.429000', '2010-12-03 07:26:08.429000', 2000.0) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'richard chew' AND phone_number LIKE '97373616') LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('richard chew', '97373616', '2010-12-03 07:26:08.437000', '2010-12-03 07:26:08.437000') RETURNING "id"[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('juniper at ardmore', 3510, 4, 89, '2010-12-03 07:26:08.443000', '2010-12-03 07:26:08.443000', 2564.1) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'richard chew' AND phone_number LIKE '97373616') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('leonie parc view', 2012, 4, 89, '2010-12-03 07:26:08.452000', '2010-12-03 07:26:08.452000', 2700.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'richard chew' AND phone_number LIKE '97373616') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('orange grove residences', 2400, 4, 89, '2010-12-03 07:26:08.459000', '2010-12-03 07:26:08.459000', 2150.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'richard chew' AND phone_number LIKE '97373616') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('beaverton court', 4349, 4, 89, '2010-12-03 07:26:08.471000', '2010-12-03 07:26:08.471000', 1126.7) RETURNING "id"[0m
+  [4;36;1mAgent Load (0.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'richard chew' AND phone_number LIKE '97373616') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('vistaya view', 1292, 3, 89, '2010-12-03 07:26:08.479000', '2010-12-03 07:26:08.479000', 944.27) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'jason lee' AND phone_number LIKE '97431100') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('bella casita-fh from $6xxk only', 474, 1, 77, '2010-12-03 07:26:08.519000', '2010-12-03 07:26:08.519000', 1265.82) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'ling tan' AND phone_number LIKE '90117717') LIMIT 1[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('ling tan', '90117717', '2010-12-03 07:26:08.528000', '2010-12-03 07:26:08.528000') RETURNING "id"[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('aalto top obtained!!! unblocked seaview!! view sho', 1550, 3, 90, '2010-12-03 07:26:08.535000', '2010-12-03 07:26:08.535000', 2032.26) RETURNING "id"[0m
+  [4;35;1mAgent Load (4.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'michelle lai' AND phone_number LIKE '91701975') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('michelle lai', '91701975', '2010-12-03 07:26:08.554000', '2010-12-03 07:26:08.554000') RETURNING "id"[0m
+  [4;35;1mSQL (3.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the azure', 1927, 3, 91, '2010-12-03 07:26:08.625000', '2010-12-03 07:26:08.625000', 2199.79) RETURNING "id"[0m
+  [4;36;1mAgent Load (1.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'larry woo' AND phone_number LIKE '96873076') LIMIT 1[0m
+  [4;35;1mSQL (2.0ms)[0m   [0mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the sail @ marina bay', 2174, 4, 72, '2010-12-03 07:26:08.656000', '2010-12-03 07:26:08.656000', 3050.0) RETURNING "id"[0m
+  [4;36;1mAgent Load (5.0ms)[0m   [0;1mSELECT * FROM "agents" WHERE (name LIKE 'maggie lee' AND phone_number LIKE '92413592') LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mINSERT INTO "agents" ("name", "phone_number", "created_at", "updated_at") VALUES('maggie lee', '92413592', '2010-12-03 07:26:08.679000', '2010-12-03 07:26:08.679000') RETURNING "id"[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('the pearl @ mount faber', 1377, 2, 92, '2010-12-03 07:26:08.691000', '2010-12-03 07:26:08.691000', 1016.7) RETURNING "id"[0m
+  [4;35;1mAgent Load (1.0ms)[0m   [0mSELECT * FROM "agents" WHERE (name LIKE 'larry woo' AND phone_number LIKE '96873076') LIMIT 1[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mINSERT INTO "condos" ("name", "area", "number_of_bedrooms", "agent_id", "created_at", "updated_at", "price_per_square_feet") VALUES('belle vue residences', 2400, 4, 72, '2010-12-03 07:26:08.737000', '2010-12-03 07:26:08.737000', 2425.0) RETURNING "id"[0m
+  [4;35;1mCondo Load (8.0ms)[0m   [0mSELECT * FROM "condos" [0m
+  [4;36;1mCondo Load (72.0ms)[0m   [0;1mSELECT * FROM "condos" [0m
+/!\ FAILSAFE /!\  Fri Dec 03 17:43:30 +0800 2010
+  Status: 500 Internal Server Error
+  The driver encountered an error: org.postgresql.util.PSQLException: Connection refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:342:in `initialize'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:474:in `new'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:474:in `initialize'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:49:in `new'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:49:in `jdbc_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/jdbc_adapter/jdbc_postgre.rb:16:in `postgresql_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:223:in `new_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:245:in `checkout_new_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:188:in `checkout'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:184:in `loop'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:184:in `checkout'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/monitor.rb:191:in `mon_synchronize'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:183:in `checkout'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:98:in `connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:326:in `retrieve_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_specification.rb:123:in `retrieve_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_specification.rb:115:in `connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/query_cache.rb:9:in `cache'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/query_cache.rb:28:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/string_coercion.rb:25:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/head.rb:9:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/methodoverride.rb:24:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/params_parser.rb:15:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/session/cookie_store.rb:99:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/failsafe.rb:26:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/lock.rb:11:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/dispatcher.rb:114:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/reloader.rb:34:in `run'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/dispatcher.rb:108:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/rails/rack/static.rb:31:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/urlmap.rb:49:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/urlmap.rb:41:in `each'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/urlmap.rb:41:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/rails/rack/log_tailer.rb:17:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/content_length.rb:13:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/handler/webrick.rb:48:in `service'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:162:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:92:in `each'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/handler/webrick.rb:14:in `run'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/commands/server.rb:111
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/commands/server.rb:31:in `require'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    script\server:3
+/!\ FAILSAFE /!\  Fri Dec 03 17:43:34 +0800 2010
+  Status: 500 Internal Server Error
+  The driver encountered an error: org.postgresql.util.PSQLException: Connection refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:342:in `initialize'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:474:in `new'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:474:in `initialize'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:49:in `new'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:49:in `jdbc_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/jdbc_adapter/jdbc_postgre.rb:16:in `postgresql_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:223:in `new_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:245:in `checkout_new_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:188:in `checkout'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:184:in `loop'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:184:in `checkout'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/monitor.rb:191:in `mon_synchronize'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:183:in `checkout'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:98:in `connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:326:in `retrieve_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_specification.rb:123:in `retrieve_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_specification.rb:115:in `connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/query_cache.rb:9:in `cache'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/query_cache.rb:28:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/string_coercion.rb:25:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/head.rb:9:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/methodoverride.rb:24:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/params_parser.rb:15:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/session/cookie_store.rb:99:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/failsafe.rb:26:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/lock.rb:11:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/dispatcher.rb:114:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/reloader.rb:34:in `run'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/dispatcher.rb:108:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/rails/rack/static.rb:31:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/urlmap.rb:49:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/urlmap.rb:41:in `each'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/urlmap.rb:41:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/rails/rack/log_tailer.rb:17:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/content_length.rb:13:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/handler/webrick.rb:48:in `service'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:162:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:92:in `each'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/handler/webrick.rb:14:in `run'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/commands/server.rb:111
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/commands/server.rb:31:in `require'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    script\server:3
+/!\ FAILSAFE /!\  Fri Dec 03 17:43:46 +0800 2010
+  Status: 500 Internal Server Error
+  The driver encountered an error: org.postgresql.util.PSQLException: Connection refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:342:in `initialize'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:474:in `new'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:474:in `initialize'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:49:in `new'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:49:in `jdbc_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/jdbc_adapter/jdbc_postgre.rb:16:in `postgresql_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:223:in `new_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:245:in `checkout_new_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:188:in `checkout'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:184:in `loop'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:184:in `checkout'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/monitor.rb:191:in `mon_synchronize'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:183:in `checkout'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:98:in `connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:326:in `retrieve_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_specification.rb:123:in `retrieve_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_specification.rb:115:in `connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/query_cache.rb:9:in `cache'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/query_cache.rb:28:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/string_coercion.rb:25:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/head.rb:9:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/methodoverride.rb:24:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/params_parser.rb:15:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/session/cookie_store.rb:99:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/failsafe.rb:26:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/lock.rb:11:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/dispatcher.rb:114:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/reloader.rb:34:in `run'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/dispatcher.rb:108:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/rails/rack/static.rb:31:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/urlmap.rb:49:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/urlmap.rb:41:in `each'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/urlmap.rb:41:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/rails/rack/log_tailer.rb:17:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/content_length.rb:13:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/handler/webrick.rb:48:in `service'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:162:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:92:in `each'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/handler/webrick.rb:14:in `run'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/commands/server.rb:111
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/commands/server.rb:31:in `require'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    script\server:3
+/!\ FAILSAFE /!\  Fri Dec 03 17:43:50 +0800 2010
+  Status: 500 Internal Server Error
+  The driver encountered an error: org.postgresql.util.PSQLException: Connection refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:342:in `initialize'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:474:in `new'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:474:in `initialize'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:49:in `new'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/active_record/connection_adapters/jdbc_adapter.rb:49:in `jdbc_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-jdbc-adapter-0.9.6-java/lib/jdbc_adapter/jdbc_postgre.rb:16:in `postgresql_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:223:in `new_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:245:in `checkout_new_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:188:in `checkout'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:184:in `loop'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:184:in `checkout'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/monitor.rb:191:in `mon_synchronize'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:183:in `checkout'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:98:in `connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:326:in `retrieve_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_specification.rb:123:in `retrieve_connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_specification.rb:115:in `connection'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/query_cache.rb:9:in `cache'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/query_cache.rb:28:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/activerecord-2.3.8/lib/active_record/connection_adapters/abstract/connection_pool.rb:361:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/string_coercion.rb:25:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/head.rb:9:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/methodoverride.rb:24:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/params_parser.rb:15:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/session/cookie_store.rb:99:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/failsafe.rb:26:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/lock.rb:11:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/dispatcher.rb:114:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/reloader.rb:34:in `run'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/actionpack-2.3.8/lib/action_controller/dispatcher.rb:108:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/rails/rack/static.rb:31:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/urlmap.rb:49:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/urlmap.rb:41:in `each'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/urlmap.rb:41:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/rails/rack/log_tailer.rb:17:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/content_length.rb:13:in `call'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/handler/webrick.rb:48:in `service'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:162:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:92:in `each'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rack-1.1.0/lib/rack/handler/webrick.rb:14:in `run'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/commands/server.rb:111
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/gems/1.8/gems/rails-2.3.8/lib/commands/server.rb:31:in `require'
+    C:/Program Files/NetBeans 6.9.1/ruby/jruby-1.5.1/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    script\server:3

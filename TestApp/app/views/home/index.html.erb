@@ -1,0 +1,111 @@
+<div>
+  <h3>Fetch Data</h3>
+  <% form_tag :controller => 'data_processor', :action => 'fetch', :method => 'post' %>
+    <div>
+      <label>Minimum Price</label>
+      <select name="minprice">
+        <option value="">Min</option>
+        <option selected="selected" value="200000" label="S$ 200,000">S$ 200,000</option>
+        <option value="300000" label="S$ 300,000">S$ 300,000</option>
+        <option value="400000" label="S$ 400,000">S$ 400,000</option>
+        <option value="500000" label="S$ 500,000">S$ 500,000</option>
+        <option value="600000" label="S$ 600,000">S$ 600,000</option>
+        <option value="700000" label="S$ 700,000">S$ 700,000</option>
+        <option value="800000" label="S$ 800,000">S$ 800,000</option>
+        <option value="900000" label="S$ 900,000">S$ 900,000</option>
+        <option value="1000000" label="S$ 1,000,000">S$ 1,000,000</option>
+        <option value="1250000" label="S$ 1,250,000">S$ 1,250,000</option>
+        <option value="1500000" label="S$ 1,500,000">S$ 1,500,000</option>
+        <option value="2000000" label="S$ 2,000,000">S$ 2,000,000</option>
+        <option value="2500000" label="S$ 2,500,000">S$ 2,500,000</option>
+        <option value="3000000" label="S$ 3,000,000">S$ 3,000,000</option>
+        <option value="4000000" label="S$ 4,000,000">S$ 4,000,000</option>
+        <option value="5000000" label="S$ 5,000,000">S$ 5,000,000</option>
+        <option value="6000000" label="S$ 6,000,000">S$ 6,000,000</option>
+        <option value="8000000" label="S$ 8,000,000">S$ 8,000,000</option>
+        <option value="10000000" label="S$ 10,000,000">S$ 10,000,000</option>
+        <option value="15000000" label="S$ 15,000,000">S$ 15,000,000</option>
+        <option value="20000000" label="S$ 20,000,000">S$ 20,000,000</option>
+        <option value="30000000" label="S$ 30,000,000">S$ 30,000,000</option>
+        <option value="50000000" label="S$ 50,000,000">S$ 50,000,000</option>
+      </select>
+    </div>
+    <div>
+      <label>Maximum Price</label>
+      <select name="maxprice">
+        <option value="">Max</option>
+        <option value="200000" label="S$ 200,000">S$ 200,000</option>
+        <option value="300000" label="S$ 300,000">S$ 300,000</option>
+        <option value="400000" label="S$ 400,000">S$ 400,000</option>
+        <option value="500000" label="S$ 500,000">S$ 500,000</option>
+        <option value="600000" label="S$ 600,000">S$ 600,000</option>
+        <option value="700000" label="S$ 700,000">S$ 700,000</option>
+        <option value="800000" label="S$ 800,000">S$ 800,000</option>
+        <option value="900000" label="S$ 900,000">S$ 900,000</option>
+        <option value="1000000" label="S$ 1,000,000">S$ 1,000,000</option>
+        <option value="1250000" label="S$ 1,250,000">S$ 1,250,000</option>
+        <option value="1500000" label="S$ 1,500,000">S$ 1,500,000</option>
+        <option value="2000000" label="S$ 2,000,000">S$ 2,000,000</option>
+        <option value="2500000" label="S$ 2,500,000">S$ 2,500,000</option>
+        <option value="3000000" label="S$ 3,000,000">S$ 3,000,000</option>
+        <option value="4000000" label="S$ 4,000,000">S$ 4,000,000</option>
+        <option value="5000000" label="S$ 5,000,000">S$ 5,000,000</option>
+        <option value="6000000" label="S$ 6,000,000">S$ 6,000,000</option>
+        <option value="8000000" label="S$ 8,000,000">S$ 8,000,000</option>
+        <option value="10000000" label="S$ 10,000,000">S$ 10,000,000</option>
+        <option value="15000000" label="S$ 15,000,000">S$ 15,000,000</option>
+        <option value="20000000" label="S$ 20,000,000">S$ 20,000,000</option>
+        <option value="30000000" label="S$ 30,000,000">S$ 30,000,000</option>
+        <option selected="selected" value="50000000" label="S$ 50,000,000">S$ 50,000,000</option>
+      </select>
+    </div>
+    <div>
+      <label>Districts of choice</label>
+      <div>
+        <p><input type="checkbox" value="D01"  name="districts[D01]"/><label>Boat Quay / Raffles Place</label></p>
+        <p><input type="checkbox" value="D02"  name="districts[D02]"/><label>Chinatown / Tanjong Pagar</label></p>
+        <p><input type="checkbox" value="D03"  name="districts[D03]"/><label>Alexandra /  Commonwealth</label></p>
+        <p><input type="checkbox" value="D04"  name="districts[D04]"/><label>Harbourfront / Telok Blangah</label></p>
+        <p><input type="checkbox" value="D05"  name="districts[D05]"/><label>Buona Vista / West Coast</label></p>
+        <p><input type="checkbox" value="D06"  name="districts[D06]"/><label>City Hall / Clarke Quay</label></p>
+        <p><input type="checkbox" value="D07"  name="districts[D07]"/><label>Beach Road / Bugis / Rochor</label></p>
+        <p><input type="checkbox" value="D08"  name="districts[D08]"/><label>Farrer Park / Serangoon Rd</label></p>
+        <p><input type="checkbox" value="D09"  name="districts[D09]"/><label>Orchard / River Valley</label></p>
+        <p><input type="checkbox" value="D10"  name="districts[D10]"/><label>Tanglin / Holland</label></p>
+        <p><input type="checkbox" value="D11"  name="districts[D11]"/><label>Newton / Novena</label></p>
+        <p><input type="checkbox" value="D12"  name="districts[D12]"/><label>Balestier / Toa Payoh</label></p>
+        <p><input type="checkbox" value="D13"  name="districts[D13]"/><label>Macpherson / Potong Pasir</label></p>
+        <p><input type="checkbox" value="D14"  name="districts[D14]"/><label>Eunos / Geylang / Paya Lebar</label></p>
+        <p><input type="checkbox" value="D15"  name="districts[D15]"/><label>East Coast / Marine Parade</label></p>
+        <p><input type="checkbox" value="D16"  name="districts[D16]"/><label>Bedok / Upper East Coast</label></p>
+        <p><input type="checkbox" value="D17"  name="districts[D17]"/><label>Changi Airport / Changi Village</label></p>
+        <p><input type="checkbox" value="D18"  name="districts[D18]"/><label>Pasir Ris / Tampines</label></p>
+        <p><input type="checkbox" value="D19"  name="districts[D19]"/><label>Hougang / Ponggol / Sengkang</label></p>
+        <p><input type="checkbox" value="D20"  name="districts[D20]"/><label>Ang Mo Kio / Bishan / Thomson</label></p>
+        <p><input type="checkbox" value="D21"  name="districts[D21]"/><label>Clementi / Upper Bukit Timah</label></p>
+        <p><input type="checkbox" value="D22"  name="districts[D22]"/><label>Boon Lay / Jurong / Tuas</label></p>
+        <p><input type="checkbox" value="D23"  name="districts[D23]"/><label>Bukit Batok / Bukit Panjang</label></p>
+        <p><input type="checkbox" value="D24"  name="districts[D24]"/><label>Choa Chu Kang / Tengah</label></p>
+        <p><input type="checkbox" value="D25"  name="districts[D25]"/><label>Admiralty / Woodlands</label></p>
+        <p><input type="checkbox" value="D26"  name="districts[D26]"/><label>Mandai / Upper Thomson</label></p>
+        <p><input type="checkbox" value="D27"  name="districts[D27]"/><label>Sembawang / Yishun</label></p>
+        <p><input type="checkbox" value="D28"  name="districts[D28]"/><label>Seletar / Yio Chu Kang</label></p>
+      </div>
+    </div>
+    <div><input type="submit" value="Fetch Data from Property Guru"/></div>
+  <% end %>
+</div>
+
+
+<% if @has_data %>
+  <div>
+    <h4>View Ordering</h4>
+    <p>
+      <% form_tag :controller => 'home', :action => 'view', :method => 'get' %>
+          <input type="radio" checked="checked" value="no_ordering" name="ordering"/><label>No Ordering</label><br/>
+          <input type="radio" checked="checked" value="psf" name="ordering"/><label>By Price Per Square Feet</label><br/>
+          <input type="radio" checked="checked" value="name" name="ordering"/><label>By Condo's Name</label><br/>
+      <% end %>
+    </p>
+  </div>
+<% end %>

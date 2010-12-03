@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyText
+  price: 1
+  area: 1
+  number_of_bedrooms: 1
+  price_per_square_feet: 1
+  agent_id: 1
+
+two:
+  name: MyText
+  price: 1
+  area: 1
+  number_of_bedrooms: 1
+  price_per_square_feet: 1
+  agent_id: 2

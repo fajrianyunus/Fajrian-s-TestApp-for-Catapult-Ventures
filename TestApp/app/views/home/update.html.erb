@@ -1,0 +1,33 @@
+<% form_tag :controller => 'data_processor', :action => 'update', :method => 'post' %>
+  <input type="hidden" name="id" value="<%= @id %>"/>
+  <p>
+    <label>Condo Name</label>
+    <input type="text" name="name" value="<%= @name %>"/>
+  </p>
+  <p>
+    <label>Area (sqft)</label>
+    <input type="text" name="area" value="<%= @area %>"/>
+  </p>
+  <p>
+    <label>Number of Bedrooms</label>
+    <input type="text" name="number_of_bedrooms" value="<%= @number_of_bedrooms %>"/>
+  </p>
+  <p>
+    <label>Price per Square Feet</label>
+    <input type="text" name="price_per_square_feet" value="<%= @price_per_square_feet %>"/>
+  </p>
+  <p>
+    <label>Agent's Name</label>
+    <input type="text" name="agent[name]" value="<%= @agent_name %>"/>
+  </p>
+  <p>
+    <label>Agent's Phone Number</label>
+    <input type="text" name="agent[phone_number]" value="<%= @agent_phone_number %>"/>
+  </p>
+
+  <p>
+    <input type="submit" value="Update" />
+    <input type="reset" value="Reset" />
+    <input type="button" value="Back" onclick="history.go(-1);"/>
+  </p>
+<% end %>
